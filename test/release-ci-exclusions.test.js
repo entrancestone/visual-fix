@@ -9,7 +9,7 @@ const workflowsDir = join(root, ".github", "workflows");
 
 /**
  * Derive the exact release-please output set from config + workflow inputs.
- * Keep this aligned with the fleet audit rule in firstmate's release-please CI
+ * Keep this aligned with the fleet audit rule in agent-secretary's release-please CI
  * report: node -> package.json (+ package-lock.json if present), changelog,
  * extra-files, and the manifest path.
  */
@@ -208,7 +208,7 @@ test("every pull_request workflow ignores the full release-output set", () => {
   assert.deepEqual(prWorkflows.map((w) => w.name).sort(), [
     "ci.yml",
     "guard-generated-files.yml",
-    "no-mistakes-required.yml",
+    "pr-guardian-required.yml",
   ]);
 
   const failures = [];
@@ -237,9 +237,9 @@ test("does not attach path filters to non-pull_request triggers on ci.yml", () =
   assert.equal(on.workflow_dispatch, undefined);
 });
 
-test("keeps bot author exemptions on guard and no-mistakes jobs", () => {
+test("keeps bot author exemptions on guard and pr-guardian jobs", () => {
   const guard = readFileSync(join(workflowsDir, "guard-generated-files.yml"), "utf8");
-  const nmr = readFileSync(join(workflowsDir, "no-mistakes-required.yml"), "utf8");
+  const nmr = readFileSync(join(workflowsDir, "pr-guardian-required.yml"), "utf8");
   assert.match(guard, /github-actions\[bot\]/);
   assert.match(guard, /release-please\[bot\]/);
   assert.match(nmr, /github-actions\[bot\]/);

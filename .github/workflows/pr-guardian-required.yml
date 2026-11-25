@@ -1,12 +1,12 @@
-name: Require no-mistakes
+name: Require pr-guardian
 run-name: "PR #${{ github.event.pull_request.number }} body compliance - ${{ github.event.action }} - event ${{ github.run_number }} (run ${{ github.run_id }})"
 
 on:
   pull_request:
-    # no-mistakes #773 originally dropped synchronize because the pipeline
+    # pr-guardian #773 originally dropped synchronize because the pipeline
     # pushed the head before writing the body attestation, so a synchronize
     # event pinned a FAILURE check to the new head before the body was rewritten.
-    # Since no-mistakes #994 the pipeline writes the attestation BEFORE it
+    # Since pr-guardian the pipeline writes the attestation BEFORE it
     # pushes, so synchronize is now exactly the event that judges a
     # pipeline-pushed head - hence it is restored under T2.
     types: [opened, edited, synchronize, reopened]
@@ -30,17 +30,17 @@ permissions:
 # an immutable per-event group so first-time-fork approvals can never collapse
 # opened/edited checks. Keep reopened coalescing as before.
 concurrency:
-  group: no-mistakes-required-${{ github.event.pull_request.number }}-${{ (github.event.action == 'opened' || github.event.action == 'edited') && github.run_id || 'head-change' }}
+  group: pr-guardian-required-${{ github.event.pull_request.number }}-${{ (github.event.action == 'opened' || github.event.action == 'edited') && github.run_id || 'head-change' }}
   cancel-in-progress: true
 
 jobs:
   check:
-    name: PR must be raised via no-mistakes
+    name: PR must be raised via pr-guardian
     runs-on: ubuntu-latest
     # Known automation accounts are exempt so automation keeps working:
     # - github-actions[bot] opens PRs via GITHUB_TOKEN
     # - dependabot[bot] and release-please[bot] open automated PRs
-    # Other authors (human or bot) must raise PRs through `git push no-mistakes`.
+    # Other authors (human or bot) must raise PRs through `git push pr-guardian`.
     #
     # These stay job-level rather than moving to the action's `exempt-authors`
     # input on purpose: an in-job exemption still requires the run to start, and
@@ -53,13 +53,13 @@ jobs:
       github.event.pull_request.user.login != 'release-please[bot]'
     steps:
       # The enforcement itself now lives in the shared composite action in the
-      # no-mistakes repository, so this repository no longer carries its own
+      # pr-guardian repository, so this repository no longer carries its own
       # copy of the script to drift.
       #
       # Pinned to an immutable commit, never @main: main is editable by the very
       # pull request this gate is judging. Bumping the pin is a separate,
       # deliberate pull request.
-      - name: Verify no-mistakes signature and pipeline attestation in PR body
-        uses: kunchenguid/no-mistakes/.github/actions/require-no-mistakes@f6441c96c352a18b9cadcaef6b6c7017e9ac3970 # v1.80.1
+      - name: Verify pr-guardian signature and pipeline attestation in PR body
+        uses: entrancestone/pr-guardian/.github/actions/require-pr-guardian@5782e2b055b268132494c91bae1594939783b305 # main
         with:
-          exempt-authors: kunchenguid
+          exempt-authors: entrancestone

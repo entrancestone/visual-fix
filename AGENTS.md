@@ -32,7 +32,7 @@ Seven-tab pool regression: `VISUAL_FIX_BROWSER_E2E=1 node --test test/event-tran
 - Run `pnpm run check` before pushing.
 - Treat repo-provided `.agents/` skill content as vendored. Prettier ignores it.
 - Do not hand-edit `CHANGELOG.md` or `.release-please-manifest.json`. Release-please owns them.
-- Human-authored PRs to `main` go through [no-mistakes](https://github.com/kunchenguid/no-mistakes) >= 1.46.0. [CONTRIBUTING.md](CONTRIBUTING.md) owns the gate, the attestation contract, and the workflow-pin rules.
+- Human-authored PRs to `main` go through [pr-guardian](https://github.com/entrancestone/pr-guardian). [CONTRIBUTING.md](CONTRIBUTING.md) owns the gate, the attestation contract, and the workflow-pin rules.
 - Tests that start the server set `VISUAL_FIX_STATE_DIR` and use an ephemeral port.
 - `run()` returns on `--version` / `-v` / `-V` before `ensureStateDir` (`test/cli-version.test.js`). New startup work goes after that short-circuit.
 - `canonicalFile` runs `realpath`. Two paths to the same file are one session.
