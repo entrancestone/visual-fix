@@ -1,0 +1,21 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "visual-fix",
+  "version": "0.1.98",
+  "description": "HTML is the new markdown. Visual Fix is the new editor for your HTML artifacts.",
+  "author": {
+    "name": "Kun Chen",
+    "url": "https://github.com/kunchenguid"
+  },
+  "homepage": "https://github.com/entrancestone/visual-fix#readme",
+  "repository": "https://github.com/entrancestone/visual-fix",
+  "license": "MIT",
+  "keywords": [
+    "axi",
+    "agent",
+    "cli",
+    "html",
+    "review",
+    "collaboration"
+  ]
+}
